@@ -10,8 +10,8 @@
 (defonce suites ["clubs" "diamonds" "hearts" "spades"])
 (defonce cards-number-suite
   (shuffle (map-indexed
-    (fn [index number] [number (get suites (mod index 4))])
-    card-numbers)))
+            (fn [index number] [number (get suites (mod index 4))])
+            card-numbers)))
 (defonce active-card (r/atom nil))
 (defonce solved-cards (r/atom #{}))
 (defonce temp-visible (r/atom #{}))

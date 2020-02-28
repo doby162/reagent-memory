@@ -1,5 +1,7 @@
 # Hello, welcome to this clojurescript / reagent project!
 
+I wanted to learn some React, so here we are!
+
 ## Running the project
 This is pretty much not a production app, there's no backend and no dedicated production server.
 To run, navigate to the root of the project and start the Figwheel compiler with `lein figwheel`. 
