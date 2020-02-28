@@ -13,9 +13,8 @@
 (defn card [id number]
   [id
    (let [active (or
-                  (= id (:id @active-card))
-                  (contains? @solved-numbers number)
-                  )]
+                 (= id (:id @active-card))
+                 (contains? @solved-numbers number))]
      [:div
       [:h3 {:style (when (not active) {:display "none"})} number " card"]
       [:img
@@ -24,9 +23,11 @@
           (cond
             @active-card
             (do
-              (when (= (:number @active-card) number)
-                (js/console.log "hey")
-                (swap! solved-numbers #(conj % number)))
+              (when
+               (and
+                (= (:number @active-card) number)
+                (not (= (:id @active-card) id)))
+               (swap! solved-numbers #(conj % number)))
               (swap! active-card (fn [%] nil)))
             :else
             (swap! active-card (fn [%] {:id id :number number}))))
