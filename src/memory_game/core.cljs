@@ -6,7 +6,12 @@
 ;; Views
 
 ; duplicate every item in the starting list and shuffle
-(defonce card-numbers (shuffle (reduce concat (map (fn [%] [% % % %]) (range 1 14)))))
+(defonce card-numbers (reduce concat (map (fn [%] [% % % %]) (range 1 14))))
+(defonce suites ["clubs" "diamonds" "hearts" "spades"])
+(defonce cards-number-suite
+  (shuffle (map-indexed
+    (fn [index number] [number (get suites (mod index 4))])
+    card-numbers)))
 (defonce active-card (r/atom nil))
 (defonce solved-cards (r/atom #{}))
 (defonce temp-visible (r/atom #{}))
@@ -17,14 +22,14 @@
 (defn victory []
   [:h1 "You got a score of " @guesses])
 
-(defn card [id number]
+(defn card [id number suite]
   [id
    (let [active (or
                  (= id (:id @active-card))
                  (contains? @solved-cards id)
-                 (contains? @temp-visible id))]
+                 (contains? @temp-visible id))
+         src (cond active (str "images/" number "_of_" suite ".svg") :else "images/back.png")]
      [:div
-      [:h2 {:style (when (not active) {:display "none"})} number]
       [:img
        {:on-click
         (when (not active)
@@ -44,12 +49,12 @@
               (do
                 (reset! active-card {:id id :number number})
                 (reset! temp-visible #{})))))
-        :src "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.HCnNvuumrkYlmPFq7moi4wHaKP%26pid%3DApi&f=1"}]])])
+        :src src}]])])
 
-(defn cards [card-numbers]
+(defn cards [card-data]
   [:div {:class "card-container"}
    (doall
-    (for [item (map-indexed #(card %1 %2) card-numbers)]
+    (for [item (map-indexed #(card %1 (first %2) (second %2)) card-data)]
       ^{:key (first item)} [:div {:class "card"} (second item)]))])
 
 (defn home-page []
@@ -59,7 +64,7 @@
      [victory]
      :else
      [counter])
-   [cards card-numbers]])
+   [cards cards-number-suite]])
 
 ;; -------------------------
 ;; Initialize app
