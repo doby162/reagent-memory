@@ -8,10 +8,14 @@
 ; duplicate every item in the starting list and shuffle
 (defonce card-numbers (shuffle (reduce concat (map (fn [%] [% %]) [1  2  3 4 5 6 7 8 9]))))
 (defonce active-card (r/atom nil))
+(defonce solved-numbers (r/atom #{}))
 
 (defn card [id number]
   [id
-   (let [active (= id (:id @active-card))]
+   (let [active (or
+                  (= id (:id @active-card))
+                  (contains? @solved-numbers number)
+                  )]
      [:div
       [:h3 {:style (when (not active) {:display "none"})} number " card"]
       [:img
@@ -20,7 +24,9 @@
           (cond
             @active-card
             (do
-              (js/console.log (= (:number @active-card) number))
+              (when (= (:number @active-card) number)
+                (js/console.log "hey")
+                (swap! solved-numbers #(conj % number)))
               (swap! active-card (fn [%] nil)))
             :else
             (swap! active-card (fn [%] {:id id :number number}))))
