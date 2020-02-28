@@ -34,7 +34,7 @@
      [:div
       [:img
        {:on-click
-        (when (not active)
+        (when (not (or (= (:id @active-card) id) (contains? @solved-cards id)))
           (fn []
             (cond
               @active-card
