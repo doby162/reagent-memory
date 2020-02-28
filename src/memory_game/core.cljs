@@ -27,10 +27,10 @@
         :src "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.HCnNvuumrkYlmPFq7moi4wHaKP%26pid%3DApi&f=1"}]])])
 
 (defn cards [card-numbers]
-  [:div {:style {:display "flex" :flex-wrap "wrap"}}
+  [:div {:class "card-container"}
    (doall
     (for [item (map-indexed #(card %1 %2) card-numbers)]
-      ^{:key (first item)} [:div (second item)]))])
+      ^{:key (first item)} [:div {:class "card"} (second item)]))])
 
 (defn home-page []
   [:div
