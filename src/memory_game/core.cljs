@@ -7,11 +7,10 @@
 
 ; duplicate every item in the starting list and shuffle
 (defonce card-numbers (shuffle (reduce concat (map (fn [%] [% %]) [1  2  3 4 5 6 7 8 9]))))
-;(js/console.log card-numbers)
 (defonce active-card (r/atom nil))
 
 (defn card [id number]
-  (let [num-id (str id "num") active (= num-id @active-card)]
+  (let [active (= id (:id @active-card))]
     [:div
      [:h3 {:style (when (not active) {:display "none"})} number " card"]
      [:img
@@ -20,10 +19,10 @@
          (cond
            @active-card
            (do
-
+             (js/console.log (= (:number @active-card) number))
              (swap! active-card (fn [%] nil)))
            :else
-           (swap! active-card (fn [%] num-id))))
+           (swap! active-card (fn [%] {:id id :number number}))))
        :src "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.HCnNvuumrkYlmPFq7moi4wHaKP%26pid%3DApi&f=1"}]]))
 
 (defn cards [card-numbers]
