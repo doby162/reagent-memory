@@ -26,9 +26,11 @@
   [id
    (let [active (or
                  (= id (:id @active-card))
-                 (contains? @solved-cards id)
                  (contains? @temp-visible id))
-         src (cond active (str "images/" number "_of_" suite ".svg") :else "images/back.png")]
+         src (cond
+               (contains? @solved-cards id) "images/back_overlay.png"
+               active (str "images/" number "_of_" suite ".svg")
+               :else "images/back.png")]
      [:div
       [:img
        {:on-click
