@@ -6,7 +6,7 @@
 ;; Views
 
 ; duplicate every item in the starting list and shuffle
-(defonce card-numbers (reduce concat (map (fn [%] [% % % %]) (range 1 14))))
+(defonce card-numbers (reduce concat (map (fn [%] [% %]) (range 1 13))))
 (defonce suites ["clubs" "diamonds" "hearts" "spades"])
 (defonce cards-number-suite
   (shuffle (map-indexed

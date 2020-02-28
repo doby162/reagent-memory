@@ -17,7 +17,8 @@ img {
     flex-wrap: wrap;
 }
 .card {
-    max-width:8%;
+    width:10em;
+    max-width:25%;
 }
 
 h1, h2, h3 {
