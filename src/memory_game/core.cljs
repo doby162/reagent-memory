@@ -55,9 +55,9 @@
 (defn home-page []
   [:div
    (cond
-    (= (count (set card-numbers)) (count @solved-numbers))
+     (= (count (set card-numbers)) (count @solved-numbers))
      [victory]
-    :else
+     :else
      [counter])
    [cards card-numbers]])
 
