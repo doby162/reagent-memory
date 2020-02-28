@@ -6,9 +6,9 @@
 ;; Views
 
 ; duplicate every item in the starting list and shuffle
-(defonce card-numbers (shuffle (reduce concat (map (fn [%] [% %]) [1  2  3 4 5 6 7 8 9]))))
+(defonce card-numbers (shuffle (reduce concat (map (fn [%] [% % % %]) (range 1 14)))))
 (defonce active-card (r/atom nil))
-(defonce solved-numbers (r/atom #{}))
+(defonce solved-cards (r/atom #{}))
 (defonce temp-visible (r/atom #{}))
 (defonce guesses (r/atom 0))
 
@@ -21,7 +21,7 @@
   [id
    (let [active (or
                  (= id (:id @active-card))
-                 (contains? @solved-numbers number)
+                 (contains? @solved-cards id)
                  (contains? @temp-visible id))]
      [:div
       [:h2 {:style (when (not active) {:display "none"})} number]
@@ -36,7 +36,7 @@
                  (and
                   (= (:number @active-card) number)
                   (not (= (:id @active-card) id)))
-                  (swap! solved-numbers #(conj % number)))
+                  (swap! solved-cards #(conj % id (:id @active-card))))
                 (swap! guesses inc)
                 (reset! temp-visible #{(:id @active-card) id})
                 (reset! active-card nil))
@@ -55,7 +55,7 @@
 (defn home-page []
   [:div
    (cond
-     (= (count (set card-numbers)) (count @solved-numbers))
+     (= (count card-numbers) (count @solved-cards))
      [victory]
      :else
      [counter])
